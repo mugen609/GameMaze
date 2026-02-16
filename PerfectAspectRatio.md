@@ -615,6 +615,9 @@ technique VitaAspectFix
 
     - Save as VitaAspect.fx
 	
+> *Note*: If your setup outputs real 960×544 instead of 2560×544, the same ReShade method works unchanged because it applies a ratio-based horizontal scale, not absolute pixel coordinates.
+	
+	
 ### **6. Enable the Shader (One-Time Setup)**	
 
  1. Launch a game with Vita3K
