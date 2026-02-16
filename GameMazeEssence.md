@@ -171,6 +171,21 @@ The following elements represent findings or unusual combinations:
 >
 > This flexibility allows [2560×144 - 2560×544] to work as valid signals with uniform horizontal timings and only vertical blanking varying per resolution, simplifying configuration compared to analog modeline generation.
 
+---
+
+### Super-resolution vs native-width (scaler pipeline)
+
+"Native resolution", when possible-- may seem like an obvious choice, but the scaling path actually still matters:
+
+**PS Vita example (960×544 native)**: scaler output **1440p (2560×1440)** → Tested functional in my system but eventually inferior to 2560 x 544.
+
+This may seem counterintuitive, but:
+
+    - **960×544 output**: the scaler must resample **horizontally** from 960→2560 (~2.67×, non-integer), which can introduce uneven pixel widths / shimmering during scrolling.
+    - **2560×544 output (super-res)**: the scaler gets a **2560-wide** input, so horizontal scaling is effectively 1:1 and the scaler only needs to scale vertically (544→1440). In my testing this looks cleaner.
+
+*Note*: this is not a universal observation (scalers and GPUs vary), but it explains why a wider "super-res" input can look better than a smaller native-width input, even when both work over HDMI.
+
 ### Resolution Coverage
 
 | Range | Typical Community Documentation | GameMaze Coverage |
