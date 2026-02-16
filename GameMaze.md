@@ -246,7 +246,7 @@ This is **highly recommended if you have two PCs**, but perfectly optional if wo
 >
 > - **Horizontal timings**: All listed CRU modes in this table share **Active: 2560**, **Front Porch: 16**, **Sync Width: 32**, **Blanking: 80**, **Polarity: -**; only the **vertical blanking** changes per resolution.
 > 
-> - This 2560-wide super-resolution pattern is used for HDMI reliability: many GPU/driver/scaler chains reject very low native widths (e.g., 320×240) or behave unpredictably at low pixel clocks.
+> - **Why super-resolution?** Beyond HDMI compatibility, a 2560 wide super-resolution often gives the scaler a cleaner input (avoids awkward non integer horizontal scaling from very small native widths). See **[Super-Res vs Native](GameMazeEssence.md#super-resolution-vs-native-width-scaler-pipeline)**
 > 
 
 ![240p in CRU](/images/240.PNG)
