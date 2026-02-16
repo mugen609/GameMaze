@@ -384,7 +384,7 @@ The following table shows the method per system:
 ​
 > **¹ Core Provided**: works for most horizontal content (e.g., arcade boards, 4:3 consoles). 
 >
-​> **² Full for vertical TATE**: fills the rotated canvas (3:4 instead of 4:3); prefer per-game overrides in FBNeo when a PCB needs something else. 
+> **² Full for vertical TATE**: fills the rotated canvas (3:4 instead of 4:3); prefer per-game overrides in FBNeo when a PCB needs something else. 
 >
 > **³ Aspect Ratio accuracy**: For mathematically correct ratios, see **[Perfect Aspect Ratio Guide](PerfectAspectRatio.md)**. 
 
@@ -803,5 +803,6 @@ This project is about more than just running games. GameMaze brings together mul
 - Unified access to emulation, arcade, and modern PC titles in one library.
 
 If you are facing similar challenges—wanting both authenticity and convenience on modern displays—this approach should give you a solid, repeatable foundation to build on and customize for your own hardware and preferences.
+
 
 
