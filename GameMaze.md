@@ -347,41 +347,40 @@ The following table shows the method per system:
 
 1. **Global Settings**
 
- - **Menu**: Settings → User Interface → **rgui** (Not the sexiest skin but best for low-res)
- - **Video**: Settings → Video → **VSync: ON**, **Adaptive VSync: OFF** (stable for 15kHz arcade)
- - **Controllers** (for reWASD harmony):  
-     Menu → Settings → Drivers → **Input**: `dinput` + **Controller**: `dinput` → **Save config**  
+   - **Menu**: Settings → User Interface → **rgui** (Not the sexiest skin but best for low-res)
+   - **Video**: Settings → Video → **VSync: ON**, **Adaptive VSync: OFF** (stable for 15kHz arcade)
+   - **Controllers** (for reWASD harmony): Menu → Settings → Drivers → **Input**: `dinput` + **Controller**: `dinput` → **Save config**  
 	 
-     *Why `dinput`? `SDL2` = Bluetooth issues, `xinput` steals Home button from reWASD.*
+ > *Why `dinput`? `SDL2` = Bluetooth issues, `xinput` steals Home button from reWASD.*
 	 
 2. **Per-core baseline** (*do this once per core*)
 
- - Load a game → Main menu → Settings → Video → Scaling → Aspect Ratio: Core Provided¹. 
+   - Load a game → Main menu → Settings → Video → Scaling → Aspect Ratio: Core Provided¹. 
    - Quick Menu → Overrides → Save Core Override.
 ​
-3. A. **CRT SwitchRes** (15 kHz group: **224p/240p**)
+3. **CRT SwitchRes** (15 kHz group: **224p/240p**)
 
- - *Applies to: NES/SNES/MD, PS1 (Mednafen), Saturn (Beetle), and most arcade (FBNeo) 224p/240p cores.* 
- - Menu → Settings → Video → CRT SwitchRes:
-    - Super res: 2560 horizontal, SwitchRes ON, 15 kHz. 
- - **Aspect Ratio**: Core Provided¹ + save a core override.
+   1. **Applies to**: NES/SNES/MD, PS1 (Mednafen), Saturn (Beetle), and most arcade (FBNeo) 224p/240p cores.
+     - Menu → Settings → Video → CRT SwitchRes:
+       - Super res: 2560 horizontal, SwitchRes ON, 15 kHz. 
+     - **Aspect Ratio**: Core Provided¹ + save a core override.
+       - ---------------------------------------------------------​
+   2. **Arcade (FBNeo)** – *special case inside 15 kHz*
+
+     - Still Menu → Settings → Video → CRT SwitchRes: 2560 horizontal, CRT SwitchRes ON, 15 kHz. 
+     - Quick Menu → Core Options → Vertical Mode: TATE or TATE Alternate (Safe, auto-applies to vertical games only). 
+     - Scaling:
+        - Horizontal games: Core Provided¹ (save as core override). 
+	    - Vertical games: Full² (save as game override when needed).
 ​
-3. B. **Arcade (FBNeo)** – *special case inside 15 kHz*
+4. **CRT SwitchRes** (31 kHz group: **480p**)
 
- - Still Menu → Settings → Video → CRT SwitchRes: 2560 horizontal, CRT SwitchRes ON, 15 kHz. 
- - Quick Menu → Core Options → Vertical Mode: TATE or TATE Alternate (Safe, auto-applies to vertical games only). 
- - Scaling:
-    - Horizontal games: Core Provided¹ (save as core override). 
-	- Vertical games: Full² (save as game override when needed).
-​
- 4. **CRT SwitchRes** (31 kHz group: **480p**)
+    - **GameCube (Dolphin)& Dreamcast (Flycast)**: Menu → Settings → Video → CRT SwitchRes: **native horizontal**, **ON**, 31 Khz, Aspect **Core Provided**
 
- - **GameCube (Dolphin)& Dreamcast (Flycast)**: Menu → Settings → Video → CRT SwitchRes: **native horizontal**, **ON**, 31 Khz, Aspect **Core Provided**
+5. **[Res-O-Matic](#res-o-matic-for-custom-resolutions) Cores** (non-SwitchRes) 
 
-​ 5. **[Res-O-Matic](#res-o-matic-for-custom-resolutions) Cores** (non-SwitchRes) :
-
- - Game Boy / GBA / DS (144p/160p/256p): SwitchRes OFF.
-    - Ratio is trickier, check in depth guide³ or select Core provided / 4:3 if you don't mind getting the wrong aspect.
+   - Game Boy / GBA / DS (144p/160p/256p): SwitchRes OFF. 
+   - Ratio is trickier, check in depth guide³ or select Core provided / 4:3 if you don't mind getting the wrong aspect.
 ​
 > **¹ Core Provided**: works for most horizontal content (e.g., arcade boards, 4:3 consoles). 
 >
@@ -804,4 +803,5 @@ This project is about more than just running games. GameMaze brings together mul
 - Unified access to emulation, arcade, and modern PC titles in one library.
 
 If you are facing similar challenges—wanting both authenticity and convenience on modern displays—this approach should give you a solid, repeatable foundation to build on and customize for your own hardware and preferences.
+
 
