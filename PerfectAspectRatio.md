@@ -492,9 +492,11 @@ Fortunately, Vita3K is compatible with **ReShade**, which we will exploit to inj
 
 ---
 
-### **OpenGL Only**
+### Rendering API (OpenGL vs Vulkan)
 
-This guide uses OpenGL for compatibility and simplicity. Vulkan + ReShade is possible but requires manual DLL deployment and Windows Registry editing. It may also be unstable on some Windows 11 + AMD configurations (exactly GameMaze's expected configuration...).
+- **OpenGL** is the easiest ReShade setup (drop-in proxy DLL).
+- **Vulkan** can also work with ReShade, but it uses the official **Vulkan layer** system (typically installed globally via the ReShade setup tool), not a local proxy DLL.
+- On my Windows 11 + AMD setup, Vulkan performs better in Vita3K and the same aspect-fix shader works. (If ReShade is not showing up in Vulkan, reinstall ReShade and ensure Vulkan layer support is enabled.)
 
 ---
 
@@ -521,7 +523,9 @@ I'm not doing a full ReShade tutorial here, but in short, ReShade is a post-proc
 
 5. Click **Finish**
 
-6. **Verify installation:** Check your emulator's folder (where you have Vita3K.exe) for a new file called **`opengl32.dll`** (reShade won't work without it)
+6. **Verify installation (depends on API):**
+    - If Vita3K uses **OpenGL**, you should see `opengl32.dll` next to `Vita3K.exe` (ReShade’s proxy hook).
+    - If Vita3K uses **Vulkan**, ReShade usually works via the **Vulkan layer** installed by the ReShade setup tool (often under `C:\ProgramData\ReShade\...`), so `opengl32.dll` is not required.
 
 ---
 
@@ -530,7 +534,7 @@ I'm not doing a full ReShade tutorial here, but in short, ReShade is a post-proc
 **Edit `config.yml`** (located in your Vita3K root folder, same directory as `Vita3k.exe`):
 
 ```yaml
-backend-renderer: OpenGL
+backend-renderer: Vulkan (recommended) or OpenGL (if any issues)
 stretch_the_display_area: true
 ```
 
@@ -558,12 +562,13 @@ In your Vita3K folder (alongside Vita3k.exe), create this folder structure if it
 
 ```text
 Vita/
-├── Vita3k.exe
-├── opengl32.dll
+├── Vita3K.exe
 ├── ReShade.ini
+├── opengl32.dll            ← Only when using OpenGL hooking (proxy DLL)
 └── reshade-shaders/
-    ├── Shaders/       ← Create this folder
-    └── Textures/      ← Create this folder
+    ├── Shaders/            ← Create this folder
+    └── Textures/           ← Create this folder
+
 ```
 
 ### **5. Create Custom Aspect Correction Shader**
@@ -579,20 +584,25 @@ uniform float HScale <
     ui_max = 1.5;
     ui_step = 0.001;
     ui_label = "Horizontal Scale";
-> = 1.0074;  // Vita 30:17 ratio correction (1 / 0.9926)
+> = 1.0074; // Vita 30:17 correction (1 / 0.9926)
 
-sampler BackBufferBorder
+sampler2D BackBufferSampler
 {
     Texture = ReShade::BackBufferTex;
-    AddressU = BORDER;
+    AddressU = CLAMP;
     AddressV = CLAMP;
-    BorderColor = 0x00000000;  // Black bars
 };
 
 float4 PS_AspectCorrect(float4 vpos : SV_Position, float2 texcoord : TEXCOORD) : SV_Target
 {
-    texcoord.x = (texcoord.x - 0.5) * HScale + 0.5;
-    return tex2D(BackBufferBorder, texcoord);
+    float2 uv = texcoord;
+    uv.x = (uv.x - 0.5) * HScale + 0.5;
+
+    // Black bars when out of field
+    if (uv.x < 0.0 || uv.x > 1.0)
+        return float4(0.0, 0.0, 0.0, 1.0);
+
+    return tex2D(BackBufferSampler, uv);
 }
 
 technique VitaAspectFix
@@ -600,9 +610,10 @@ technique VitaAspectFix
     pass
     {
         VertexShader = PostProcessVS;
-        PixelShader = PS_AspectCorrect;
+        PixelShader  = PS_AspectCorrect;
     }
 }
+
 ```
 
  - What this shader does:
