@@ -316,8 +316,8 @@ The following table shows the method per system:
 | GBA                         | RetroArch             | 160p           | Res-O-Matic     | SwitchRes disabled                                 |
 | Nintendo DS                 | RetroArch (DeSmuME)   | 256p           | Res-O-Matic     | Stacked screens, SwitchRes disabled                |
 | PSP                         | PPSSPP                | 272p           | Res-O-Matic     | Use if desktop ≠ 272p                              |
-| Dreamcast                   | RetroArch (Flycast)   | 480p           | Res-O-Matic     | SwitchRes disabled                                 |
-| GameCube                    | RetroArch (Dolphin)   | 480p           | Res-O-Matic     | SwitchRes disabled                                 |
+| Dreamcast /Naomi /Atomiswave| RetroArch (Flycast)   | 480p           | CRT SwitchRes   | Automatic resolution switching                     |
+| GameCube                    | RetroArch (Dolphin)   | 480p           | CRT SwitchRes   | Automatic resolution switching                     |
 | PS2                         | PCSX2                 | 480p           | Res-O-Matic     | Use if desktop ≠ 480p                              |
 | 3DS                         | Azahar                | 400p/800p      | Res-O-Matic     | Stacked screens,                                   |
 | PS3                         | RPCS3                 | 720p           | Res-O-Matic     | Use if desktop ≠ 720p                              |
@@ -347,37 +347,47 @@ The following table shows the method per system:
 
 1. **Global Settings**
 
-   - **Menu**: Settings → User Interface → **rgui** (Not the sexiest skin but best for low-res)
-   - **Video**: Settings → Video → **VSync: ON**¹, **Adaptive VSync: OFF**¹ (stable for 15kHz arcade)
-   - **Controllers** (for reWASD harmony):  
+ - **Menu**: Settings → User Interface → **rgui** (Not the sexiest skin but best for low-res)
+ - **Video**: Settings → Video → **VSync: ON**, **Adaptive VSync: OFF** (stable for 15kHz arcade)
+ - **Controllers** (for reWASD harmony):  
      Menu → Settings → Drivers → **Input**: `dinput` + **Controller**: `dinput` → **Save config**  
 	 
      *Why `dinput`? `SDL2` = Bluetooth issues, `xinput` steals Home button from reWASD.*
+	 
+2. **Per-core baseline** (*do this once per core*)
 
-2. **Per-Core Setup** (all cores)  
-   - Load game → Settings → Video → Scaling → **Aspect Ratio: Core Provided**¹  
-   - Quick Menu → Overrides → **Save Core Override**
+ - Load a game → Main menu → Settings → Video → Scaling → Aspect Ratio: Core Provided¹. 
+   - Quick Menu → Overrides → Save Core Override.
+​
+3. A. **CRT SwitchRes** (15 kHz group: **224p/240p**)
 
-3. **CRT SwitchRes Cores** (224p/240p auto-switching)  
-   - **PS1 (Mednafen)**: Settings → Video → CRT SwitchRes **ON**, 15kHz, 2560 horizontal  
-   - Settings → Video → Scaling → Aspect: **Core Provided**¹  
-   - Quick Menu → Overrides → **Save Core Override**
+ - *Applies to: NES/SNES/MD, PS1 (Mednafen), Saturn (Beetle), and most arcade (FBNeo) 224p/240p cores.* 
+ - Menu → Settings → Video → CRT SwitchRes:
+    - Super res: 2560 horizontal, SwitchRes ON, 15 kHz. 
+ - **Aspect Ratio**: Core Provided¹ + save a core override.
+​
+3. B. **Arcade (FBNeo)** – *special case inside 15 kHz*
 
-4. **Arcade (FBNeo)**:  
-   - Settings → Video → CRT SwitchRes **ON**, 15kHz, 2560 horizontal  
-   - Quick Menu → **Core Options → Vertical Mode**: **TATE** or **TATE Alternate** (Safe, auto-applies to vertical games only)  
-   - Settings → Video → Scaling → Aspect: **Core Provided**¹ (horizontal games) / **Full**² (vertical games)  
-   - Quick Menu → Overrides → **Save Core Override**, or **Save Game Override** for per-ROM tweaks (vertical ones)
+ - Still Menu → Settings → Video → CRT SwitchRes: 2560 horizontal, CRT SwitchRes ON, 15 kHz. 
+ - Quick Menu → Core Options → Vertical Mode: TATE or TATE Alternate (Safe, auto-applies to vertical games only). 
+ - Scaling:
+    - Horizontal games: Core Provided¹ (save as core override). 
+	- Vertical games: Full² (save as game override when needed).
+​
+ 4. **CRT SwitchRes** (31 kHz group: **480p**)
 
-5. **[Res-O-Matic](#res-o-matic-for-custom-resolutions) Cores**:  
-   - **GBA**³: CRT SwitchRes **OFF**, 160p via Res-O-Matic  
-   - **DS (DeSmuME)**: CRT SwitchRes **OFF**, Aspect **Full**³, Screen Layout **Bottom/Top** or **Top/Bottom**, 256p via Res-O-Matic  
-   - **GameCube (Dolphin)/Dreamcast (Flycast)**: CRT SwitchRes **OFF**, Aspect **Core Provided**, 480p via Res-O-Matic
-   
-**¹ Core Provided** works for 99% horizontal arcade (e.g., Street Fighter II 384×224 → perfect 4:3 with scaler set to 4:3).  
-**² Full for vertical TATE**: Forces canvas fill → 3:4 rotated proportions on 4:3 scaler (e.g., Pac-Man fills portrait monitor correctly). Use **per-game override** in FBNeo (diverse PCBs).
-### ³ Aspect Ratio Troubleshooting
-> For mathematically correct ratios, see **[Perfect Aspect Ratio Guide](PerfectAspectRatio.md)**.  
+ - **GameCube (Dolphin)& Dreamcast (Flycast)**: Menu → Settings → Video → CRT SwitchRes: **native horizontal**, **ON**, 31 Khz, Aspect **Core Provided**
+
+​ 5. **[Res-O-Matic](#res-o-matic-for-custom-resolutions) Cores** (non-SwitchRes) :
+
+ - Game Boy / GBA / DS (144p/160p/256p): SwitchRes OFF.
+    - Ratio is trickier, check in depth guide³ or select Core provided / 4:3 if you don't mind getting the wrong aspect.
+​
+> **¹ Core Provided**: works for most horizontal content (e.g., arcade boards, 4:3 consoles). 
+>
+​> **² Full for vertical TATE**: fills the rotated canvas (3:4 instead of 4:3); prefer per-game overrides in FBNeo when a PCB needs something else. 
+>
+> **³ Aspect Ratio accuracy**: For mathematically correct ratios, see **[Perfect Aspect Ratio Guide](PerfectAspectRatio.md)**. 
 
 ---
 
@@ -794,3 +804,4 @@ This project is about more than just running games. GameMaze brings together mul
 - Unified access to emulation, arcade, and modern PC titles in one library.
 
 If you are facing similar challenges—wanting both authenticity and convenience on modern displays—this approach should give you a solid, repeatable foundation to build on and customize for your own hardware and preferences.
+
