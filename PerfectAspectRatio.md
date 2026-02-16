@@ -25,7 +25,7 @@
 
 The RetroTINK 4K can trim images to exact ratios and save it per profiles, which is fine for physical consoles (eg 5 consoles → 5 RT4K profiles). But for a single emulation box like GameMaze outputting everything over one HDMI connection, I feel that constantly switching scaler profiles between systems would break the seamless experience.
 
-**Solution**: Use only **two scaler profiles** (4:3 and 16:9) and handle aspect compensation in software.
+**Proposed solution**: Use only **two scaler profiles** (4:3 and 16:9) and handle aspect compensation in software.
 
 ## Correct Ratio Strategy
 
@@ -134,6 +134,21 @@ Most emulators stretch content to fullscreen (2560×272), then you add letterbox
 
 **Solution**: Edit the config file to unlock higher aspect ratio values.
 
+---
+
+**Original settings**: (typically in `C:\Users\YourAccount\Documents\PPSSPP\PSP\SYSTEM\`, but hold on... We will edit them further)
+
+```ini
+DisplayScale = 1.000000
+DisplayIntegerScale = False
+DisplayAspectRatio = 1.000000
+DisplayStretch = False
+```
+
+Result:
+![FF1_1.000](/images/PSP_1.000.png) 
+*Final Fantasy (1) PSP at 272p*
+
 ### The Math (Two Steps)
 
 **Step 1: Expand from squished to 16:9**
@@ -148,9 +163,13 @@ $$
 \frac{2560}{480} = 5.333333
 $$
 
+Result:
+![FF1_5.333](/images/PSP_5.333.png) 
+*Final Fantasy (1) PSP at 272p*
+
 ---
 
-Setting `DisplayAspectRatio = 5.333333` would give us proper 16:9.
+Setting `DisplayAspectRatio = 5.333333` gives us proper 16:9.
 
 **Step 2: Compensate from 16:9 down to 30:17**
 
@@ -167,6 +186,10 @@ Multiply the 16:9 value by the compensation factor:
 $$
 5.333333 \times 0.9926 = 5.294
 $$
+
+Result:
+![FF1_5.290](/images/PSP_5.290.png) 
+*Final Fantasy (1) PSP at 272p*
 
 ---
 
@@ -617,8 +640,3 @@ Vita games now display in perfect native 30:17 aspect ratio with imperceptible b
 From now on: Just launch Vita3K normally and the correction applies silently every time.
 
 **← [Back to Main Setup Guide](GameMaze.md)**
-
-
-
-
-
