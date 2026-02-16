@@ -235,14 +235,19 @@ This is **highly recommended if you have two PCs**, but perfectly optional if wo
 | 272p       | 2560×272     | 16/3              | 32/4             | 80/17          | -/-      | 60.003       |
 | 384p       | 2560×384     | 16/3              | 32/4             | 80/24          | -/-      | 60.002       |
 | 400p       | 2560×400     | 16/3              | 32/4             | 80/25          | -/-      | 60.000       |
-| 544p       | 2560×544     | 16/3              | 32/4             | 80/34          | -/-      | 60.000       |
+| 544p¹      | 2560×544     | 16/3              | 32/4             | 80/34          | -/-      | 60.000       |
+
+**¹Advanced users**: *Vita active width can be replaced by 960 with the same timings*.
 
 **Notes**:
 > - **CRU slot budget**: Since CRU 1.5.3, slot limits have been removed (previously capped at 6). I've tested 9 custom timings successfully; feel free to add more if needed, CRU changelog claims it will work.
 >
 > - **480p/720p/1080p**: Standard HDMI modes, no CRU needed.
 >
-> - **Horizontal timings**: All share Active: 2560, Front Porch: 16, Sync Width: 32, Blanking: 80, Polarity: -. *This uniformity is a consequence of HDMI's super resolution requirement (digital connections and modern drivers reject true low-width signals like 320×240). With HDMI, it's OK to have only vertical blanking vary per resolution.*
+> - **Horizontal timings**: All listed CRU modes in this table share **Active: 2560**, **Front Porch: 16**, **Sync Width: 32**, **Blanking: 80**, **Polarity: -**; only the **vertical blanking** changes per resolution.
+> 
+> - This 2560-wide super-resolution pattern is used for HDMI reliability: many GPU/driver/scaler chains reject very low native widths (e.g., 320×240) or behave unpredictably at low pixel clocks.
+> 
 
 ![240p in CRU](/images/240.PNG)
 
@@ -803,6 +808,7 @@ This project is about more than just running games. GameMaze brings together mul
 - Unified access to emulation, arcade, and modern PC titles in one library.
 
 If you are facing similar challenges—wanting both authenticity and convenience on modern displays—this approach should give you a solid, repeatable foundation to build on and customize for your own hardware and preferences.
+
 
 
 
