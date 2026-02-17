@@ -422,6 +422,7 @@ The following table shows the method per system:
      unevenstretch     1
      switchres         1
      ```
+	
    - For vertical games (e.g., Shienryu), create `/MAME/shienryu.ini` with:
      ```ini
      # Shienryu
@@ -439,14 +440,14 @@ The following table shows the method per system:
 	 unevenstretchx    0
 	 unevenstretchy    1
      ```
+   
    - This **requires 320p timings** set in CRU. Launch the game, adjust rotation if needed, then save *Game* settings (not system settings).
 
 ### Other MAME:
 
    - For other platforms (Namco, SNK), note the different path and use a 640×480@60 or desired resolution:
-
-	```text 
-	   MAME/
+```text 
+	MAME/
 	├─ mame.exe
 	├─ mame.ini              (sometimnes under ini/ depending versions)
 	├─ tekken3.ini           (example per-game override)
@@ -459,18 +460,17 @@ The following table shows the method per system:
 		  ├─ hng64.ini          (Hyper Neo Geo 64)
 		  ├─ namcos11.ini       (Namco System 11)
 		  └─ namcos12.ini       (Namco System 12)
-	```
+```
 
 Similar ini file configuration:
-
-	```ini
+```ini
 	# Namco System 12 (namcos12.cpp)
 	resolution        640x480@60
 	aspect            4:3
 	rotate            0
 	unevenstretch     1
 	switchres         1
-     ```
+```
 
 2. **Supermodel (Sega Model 3)**
 
