@@ -233,11 +233,14 @@ This is **highly recommended if you have two PCs**, but perfectly optional if wo
 | 240p       | 2560×240     | 16/3              | 32/4             | 80/15          | -/-      | 60.011       |
 | 256p       | 2560×256     | 16/3              | 32/4             | 80/16          | -/-      | 59.840       |
 | 272p       | 2560×272     | 16/3              | 32/4             | 80/17          | -/-      | 60.003       |
+| 320p¹      | 2560×320     | 16/3              | 32/4             | 80/20          | -/-      | 60.004       |
 | 384p       | 2560×384     | 16/3              | 32/4             | 80/24          | -/-      | 60.002       |
 | 400p       | 2560×400     | 16/3              | 32/4             | 80/25          | -/-      | 60.000       |
-| 544p¹      | 2560×544     | 16/3              | 32/4             | 80/34          | -/-      | 60.000       |
+| 544p²      | 2560×544     | 16/3              | 32/4             | 80/34          | -/-      | 60.000       |
 
-**¹Advanced users**: *Vita active width can be replaced by 960 with the same timings*.
+**¹ Optional** 320p for some vertical MAME arcade
+
+**² Advanced users**: *Vita active width can be replaced by 960 with the same timings. Works but not great in my test*.
 
 **Notes**:
 > - **CRU slot budget**: Since CRU 1.5.3, slot limits have been removed (previously capped at 6). I've tested 9 custom timings successfully; feel free to add more if needed, CRU changelog claims it will work.
@@ -246,7 +249,7 @@ This is **highly recommended if you have two PCs**, but perfectly optional if wo
 >
 > - **Horizontal timings**: All listed CRU modes in this table share **Active: 2560**, **Front Porch: 16**, **Sync Width: 32**, **Blanking: 80**, **Polarity: -**; only the **vertical blanking** changes per resolution.
 > 
-> - **Why super-resolution?** Beyond HDMI compatibility, a 2560 wide super-resolution often gives the scaler a cleaner input (avoids awkward non integer horizontal scaling from very small native widths). See **[Super-Res vs Native](GameMazeEssence.md#super-resolution-vs-native-width-scaler-pipeline)**
+> - **Why super-resolution?** Beyond HDMI compatibility, in a digital chain, 2560 wide super-resolution often gives the scaler a cleaner input (avoids awkward non integer horizontal scaling from very small native widths). See **[Super-Res vs Native](GameMazeEssence.md#super-resolution-vs-native-width-scaler-pipeline)**
 > 
 
 ![240p in CRU](/images/240.PNG)
@@ -308,21 +311,21 @@ This is **highly recommended if you have two PCs**, but perfectly optional if wo
 ### Resolution Handling
 
 **Emulators handle resolution in 3 ways**:
- - SwitchRes in Retroarch for 224p & 240p 
+ - SwitchRes in Retroarch for 224p/240p & 480p 
  - *Desktop default (Emulator launches at desktop resolution*, **most common**): we will need [Res-O-Matic](#res-o-matic-for-custom-resolutions) when we want a different game resolution. 
  - Config file edition
  
 The following table shows the method per system:
 | System                      | Emulator              | Native Res     | Method          | Notes                                              |
 |-----------------------------|-----------------------|----------------|-----------------|----------------------------------------------------|
-| NES, SNES, Megadrive        | RetroArch             | 224p-240p      | CRT SwitchRes   | Automatic resolution switching                     |
-| PS1                         | RetroArch             | 240p           | CRT SwitchRes   | Automatic resolution switching                     |
+| NES, SNES, Megadrive        | RetroArch             | 224p-240p      | CRT SwitchRes   | Auto SwitchRes (**2560 super-width**)                  |
+| PS1                         | RetroArch             | 240p           | CRT SwitchRes   | Auto SwitchRes (**2560 super-width**)                  |
 | Game Boy                    | RetroArch             | 144p           | Res-O-Matic     | SwitchRes disabled                                 |
 | GBA                         | RetroArch             | 160p           | Res-O-Matic     | SwitchRes disabled                                 |
 | Nintendo DS                 | RetroArch (DeSmuME)   | 256p           | Res-O-Matic     | Stacked screens, SwitchRes disabled                |
 | PSP                         | PPSSPP                | 272p           | Res-O-Matic     | Use if desktop ≠ 272p                              |
-| Dreamcast /Naomi /Atomiswave| RetroArch (Flycast)   | 480p           | CRT SwitchRes   | Automatic resolution switching                     |
-| GameCube                    | RetroArch (Dolphin)   | 480p           | CRT SwitchRes   | Automatic resolution switching                     |
+| Dreamcast /Naomi /Atomiswave| RetroArch (Flycast)   | 480p           | CRT SwitchRes   | Auto SwitchRes (**Native super-width**)                |
+| GameCube                    | RetroArch (Dolphin)   | 480p           | CRT SwitchRes   | Auto SwitchRes (**Native super-width**)                |
 | PS2                         | PCSX2                 | 480p           | Res-O-Matic     | Use if desktop ≠ 480p                              |
 | 3DS                         | Azahar                | 400p/800p      | Res-O-Matic     | Stacked screens,                                   |
 | PS3                         | RPCS3                 | 720p           | Res-O-Matic     | Use if desktop ≠ 720p                              |
@@ -405,7 +408,9 @@ The following table shows the method per system:
 ## 🕹️
 ### Standalone Emulator Configuration
 
-1. **MAME 0.272 (Per-System Settings, ST-V 224p example.)**
+1. **MAME 0.285 (Per-System Settings)**
+
+### ST-V 224p example:
 
    - Run a game in MAME once and close it.  
    - Create `/MAME/ini/stvbios.ini` containing:
@@ -419,11 +424,53 @@ The following table shows the method per system:
      ```
    - For vertical games (e.g., Shienryu), create `/MAME/shienryu.ini` with:
      ```ini
-     rotate            1
-     ```
-   - Launch the game, adjust rotation if needed, then save *Game* settings (not system settings).
+     # Shienryu
+	 switchres         1
+	 resolution        2560x320@60
+	 keepaspect        1
+	 aspect            4:3
 
-   For other platforms (Namco, SNK), repeat this process and use a 640×480@60 or desired resolution.
+	 # rotate 0 or try rotate 1 depending if your monitor is physically rotated.
+	 rotate            0
+	 autorol           0
+	 autoror           0
+
+	 unevenstretch     0
+	 unevenstretchx    0
+	 unevenstretchy    1
+     ```
+   - This **requires 320p timings** set in CRU. Launch the game, adjust rotation if needed, then save *Game* settings (not system settings).
+
+### Other MAME:
+
+   - For other platforms (Namco, SNK), note the different path and use a 640×480@60 or desired resolution:
+
+	```text 
+	   MAME/
+	├─ mame.exe
+	├─ mame.ini              (sometimnes under ini/ depending versions)
+	├─ tekken3.ini           (example per-game override)
+	├─ shienryu.ini          (example per-game override)
+	└─ ini/
+	   ├─ vertical.ini          (optional – applies to vertical games)
+	   ├─ horizon.ini           (optional – applies to horizontal games)
+	   ├─ stvbios.ini
+	   └─ source/
+		  ├─ hng64.ini          (Hyper Neo Geo 64)
+		  ├─ namcos11.ini       (Namco System 11)
+		  └─ namcos12.ini       (Namco System 12)
+	```
+
+Similar ini file configuration:
+
+	```ini
+	# Namco System 12 (namcos12.cpp)
+	resolution        640x480@60
+	aspect            4:3
+	rotate            0
+	unevenstretch     1
+	switchres         1
+     ```
 
 2. **Supermodel (Sega Model 3)**
 
