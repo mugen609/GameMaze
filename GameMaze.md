@@ -233,7 +233,7 @@ This is **highly recommended if you have two PCs**, but perfectly optional if wo
 | 240p       | 2560×240     | 16/3              | 32/4             | 80/15          | -/-      | 60.011       |
 | 256p       | 2560×256     | 16/3              | 32/4             | 80/16          | -/-      | 59.840       |
 | 272p       | 2560×272     | 16/3              | 32/4             | 80/17          | -/-      | 60.003       |
-| 320p¹      | 2560×320     | 16/3              | 32/4             | 80/20          | -/-      | 60.004       |
+| *320p*¹      | 2560×320     | 16/3              | 32/4             | 80/20          | -/-      | 60.004       |
 | 384p       | 2560×384     | 16/3              | 32/4             | 80/24          | -/-      | 60.002       |
 | 400p       | 2560×400     | 16/3              | 32/4             | 80/25          | -/-      | 60.000       |
 | 544p²      | 2560×544     | 16/3              | 32/4             | 80/34          | -/-      | 60.000       |
@@ -719,7 +719,7 @@ The approach is to create `.bat` launchers in emulator folders and configure the
 
 - **Example: Nintendo DS (2560×256)**
 
-  - Create `C:\RetroArch\retroarch_ds_256p.bat` containing:
+  - Create `C:\Emulators\RetroArch\retroarch_ds_256p.bat` (*Or your Retroarch directory*)containing:
     ```batch
     @echo off
     echo start /wait "" "C:\Emulators\RetroArch\retroarch.exe" -L "cores\desmume_libretro.dll" %* > "%TEMP%\launch_ds.bat"
@@ -856,6 +856,14 @@ This project is about more than just running games. GameMaze brings together mul
 
 If you are facing similar challenges—wanting both authenticity and convenience on modern displays—this approach should give you a solid, repeatable foundation to build on and customize for your own hardware and preferences.
 
+---
 
+**📖 [Back to Top](GameMaze.md)**
 
+ - **Quick Overview**: [Read Me](README.md)
 
+ - **Advanced Guides:**
+    - [Perfect Aspect Ratio Tutorial](PerfectAspectRatio.md)
+    - [SSH Setup For Gamepad Only](SSH_NoPassword.md) 
+ 
+ - **Design rationales**: [GameMaze Essence](GameMazeEssence.md)
