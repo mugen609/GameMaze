@@ -866,4 +866,4 @@ If you are facing similar challenges—wanting both authenticity and convenience
     - [Perfect Aspect Ratio Tutorial](PerfectAspectRatio.md)
     - [SSH Setup For Gamepad Only](SSH_NoPassword.md) 
  
- - **Design rationales**: [GameMaze Essence](GameMazeEssence.md)
+ - **Design rationales**: [GameMaze Essence](#table-of-contents)
