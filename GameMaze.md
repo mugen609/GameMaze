@@ -470,7 +470,13 @@ Similar ini file configuration:
 	rotate            0
 	unevenstretch     1
 	switchres         1
-```
+	filter            0
+    keepaspect        1
+    unevenstretch     0
+    intoverscan       0
+    centerh           1
+    centerv           1
+    ```
 
 2. **Supermodel (Sega Model 3)**
 
@@ -633,7 +639,7 @@ You can easily find general documentation online, eg. [Just Jamie's Tutorial](ht
   - Download and install LaunchBox with BigBox for gamepad-only navigation.  
   - Import ROMs and configure emulators (see LaunchBox documentation for details).
 
-- **Unified Quit Control**
+## Basic Unified Quit Control
 
   - For emulators that support custom quit keys (e.g., PPSSPP):  
     - Set `ESC` as the quit key in emulator settings.  
@@ -656,12 +662,71 @@ You can easily find general documentation online, eg. [Just Jamie's Tutorial](ht
 
 ![LaunchBox Quit Script](/images/close.png)
 
-- **Optional popups hidding)*:
+- **Optional popups hidding**:
 	- Tools → Manage Emulators → select emulator → Details:  
 	  - Enable **Attempt to hide console window on startup/shutdown**.  
 	  - Under **Startup Screen**:  
 		- Enable **Aggressive Startup Window Hiding** (helps hide launcher's windows).  
 	  - Enable **Hide All Windows that are not in Exclusive Fullscreen Mode** to help keep BigBox in focus.
+
+---
+
+## Advanced Unified Quit Control
+
+For games that launch without emulators and where you'd have difficulties let your 'quit key' enforce quit, we will set a AHK method to harmonize the flow.
+
+### Steam example (the same method can be transfered to pretty much any game present in LaunchBox)
+
+**Assumptions**:
+ - **ESC** is your **quit** key (*or modify the script accordingly*)
+ - Your game is compatible with WinClose (*99% of the time, else try "Send, !{F4}" or "WinGet, PID, PID" methods; not described in this example, but a search will help*) 
+
+*Note*:
+> - The method relies on **AHK** which is **already part of LaunchBox package**, no need for AHK.exe additional download.
+> 
+ 
+1. Download Bulk Add/Remove Additional Applications from [LaunchBox Forum thread by JoeViking245](https://forums.launchbox-app.com/files/file/4375-bulk-addremove-additional-applications/)
+ 
+2. Extract the content into your Launchbox installation folder under `LaunchBox\Plugins\`
+ 
+3. Create a new file anywhere you see fit. I am using my ROMs folder, Windows sub-folder, as I am targeting Steam games. Name it `exit-hook.ahk` (or anything.ahk).
+ 
+ Example: `C:\ROMs\Windows\exit-hook.ahk`
+ 
+4. Inside that file, enter and save:
+    ```autohotkey
+	Esc::
+	Sleep, 50
+	WinClose, A
+	Sleep, 100
+	ExitApp
+	return
+	```
+
+5. Start (or restart) Launchbox
+
+6. Filter your games by platform (*or any useful filter for your case*)
+
+7. Select all (*or desired games*)
+
+8. **Right click**, and at the bottom of the dropdown choose :
+
+Bulk Add/Remove Additional Apps > Bulk Add Additional Apps
+![AHKQuit](/images/QuitSteamClick.png)
+
+9. Launch Tab (*No other tabs needed*):
+
+    - Application Name: Quit Esc
+	
+	- Application path: `ThirdParty\AutoHotkey\AutoHotkey.exe` (this path starts at Launchbox root folder and AHK should be there for everyone)
+	
+	- Application Command Line Parameter: `C:\ROMs\Windows\exit-hook.ahk`
+	
+	- Automatically Run Before Main Application : ticked (all other boxes unticked)
+ 
+![AHKQuit](/images/QuitSteam.png)
+
+10. Press OK to save. Now, in a Steam game: whenever you press your gamepad key that is mapped to ESC, it should close the game instantly.
 
 ---
 	  
