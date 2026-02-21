@@ -833,16 +833,11 @@ Windows does not offer native controller reordering. To avoid needing a keyboard
 
    Create `C:\Emulators\Bluetooth\ToggleBluetooth.bat`:
 
-   ```batch
-   @echo off
-   net session >nul 2>&1
-   if %errorlevel% neq 0 (
-       powershell -Command "Start-Process cmd -ArgumentList '/c %~f0' -Verb RunAs" >nul 2>&1
-       exit
-   )
-   start /min powershell -NoProfile -ExecutionPolicy Bypass -Command "$ProgressPreference = 'SilentlyContinue'; $bt = Get-PnpDevice -FriendlyName '*Bluetooth*' | Where-Object {$_.HardwareID -like '*BTH\\MS_BTHBRB*'}; $bt | Disable-PnpDevice -Confirm:$false; Start-Sleep -Milliseconds 500; $bt | Enable-PnpDevice -Confirm:$false; Start-Sleep -Milliseconds 500" >nul 2>&1
-   exit
-   ```
+```batch
+	@echo off
+	start /min powershell -NoProfile -ExecutionPolicy Bypass -Command "$ProgressPreference='SilentlyContinue'; Add-Type -AssemblyName System.Runtime.WindowsRuntime; $m=[System.WindowsRuntimeSystemExtensions].GetMethods(); $asOp=($m|?{$_.Name -eq 'AsTask' -and $_.GetParameters().Count -eq 1 -and $_.GetParameters()[0].ParameterType.Name -eq 'IAsyncOperation`1'})[0]; function Await($t,$r){$n=$asOp.MakeGenericMethod($r).Invoke($null,@($t));$n.Wait(-1)|Out-Null;$n.Result}; [Windows.Devices.Radios.Radio,Windows.System.Devices,ContentType=WindowsRuntime]|Out-Null; [Windows.Devices.Radios.RadioAccessStatus,Windows.System.Devices,ContentType=WindowsRuntime]|Out-Null; [Windows.Devices.Radios.RadioState,Windows.System.Devices,ContentType=WindowsRuntime]|Out-Null; Await ([Windows.Devices.Radios.Radio]::RequestAccessAsync()) ([Windows.Devices.Radios.RadioAccessStatus])|Out-Null; $radios=Await ([Windows.Devices.Radios.Radio]::GetRadiosAsync()) ([System.Collections.Generic.IReadOnlyList[Windows.Devices.Radios.Radio]]); $bt=$radios|?{$_.Kind -eq [Windows.Devices.Radios.RadioKind]::Bluetooth}; Await ($bt.SetStateAsync([Windows.Devices.Radios.RadioState]::Off)) ([Windows.Devices.Radios.RadioAccessStatus])|Out-Null; Start-Sleep -Milliseconds 500; Await ($bt.SetStateAsync([Windows.Devices.Radios.RadioState]::On)) ([Windows.Devices.Radios.RadioAccessStatus])|Out-Null; Start-Sleep -Milliseconds 500" >nul 2>&1
+	exit
+```
 
 2. **Create a Dummy ROM File**
 
