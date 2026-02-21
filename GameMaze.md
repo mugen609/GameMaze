@@ -476,7 +476,7 @@ Similar ini file configuration:
     intoverscan       0
     centerh           1
     centerv           1
-    ```
+```
 
 2. **Supermodel (Sega Model 3)**
 
@@ -694,14 +694,34 @@ For games that launch without emulators and where you'd have difficulties let yo
  Example: `C:\ROMs\Windows\exit-hook.ahk`
  
 4. Inside that file, enter and save:
-    ```autohotkey
-	Esc::
-	Sleep, 50
-	WinClose, A
-	Sleep, 100
-	ExitApp
-	return
-	```
+```autohotkey
+#Persistent
+
+WinGet, LBWindow, ID, A
+GameHWND := 0
+
+Sleep, 30000         ; Wait 30s before starting to monitor. (handles launcher chains, slow-loading games, splash screens)
+SetTimer, MonitorGame, 1000
+return
+
+Esc::
+Sleep, 50
+WinClose, A
+Sleep, 100
+ExitApp
+return
+
+MonitorGame:
+if (GameHWND != 0) {
+    if !WinExist("ahk_id " . GameHWND)
+        ExitApp
+    return
+}
+WinGet, ActiveHWND, ID, A
+if (ActiveHWND != LBWindow and ActiveHWND != 0)
+    GameHWND := ActiveHWND
+return
+```
 
 5. Start (or restart) Launchbox
 
@@ -927,3 +947,4 @@ If you are facing similar challenges—wanting both authenticity and convenience
     - [SSH Setup For Gamepad Only](SSH_NoPassword.md) 
  
  - **Design rationales**: [GameMaze Essence](GameMazeEssence.md)
+
